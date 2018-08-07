@@ -471,7 +471,7 @@ public class DBTableColumn extends DBColumn
                 {   // check enum
                     value = ((Enum<?>)value).name();
                 }
-                if (value!=null && value.toString().length() > size)
+                if (value!=null && size > 0 && value.toString().length() > size)
                     throw new FieldValueTooLongException(this);
                 break;
                 

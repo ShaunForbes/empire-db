@@ -519,8 +519,13 @@ public abstract class DBDatabaseDriver implements Serializable
         } 
         else if (dataType == DataType.BLOB)
         { // Get bytes of a binary large object
-            java.sql.Blob blob = rset.getBlob(columnIndex);
-            return ((blob != null) ? blob.getBytes(1, (int) blob.length()) : null);
+            try {
+                java.sql.Blob blob = rset.getBlob(columnIndex);
+                return ((blob != null) ? blob.getBytes(1, (int) blob.length()) : null);
+            } catch (SQLException ex) {
+                final byte[] bytes = rset.getBytes(columnIndex);
+                return bytes;
+            }
         } 
         else
         {

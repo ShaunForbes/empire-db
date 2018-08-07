@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.beanutils.MethodUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -523,7 +522,7 @@ public final class ObjectUtils
         // Get Class form Primitive Type
         if (c.isPrimitive())
         {   // Get's the Java Class representing the primitive type
-            c = (Class<T>) MethodUtils.getPrimitiveWrapper(c);
+            c = getPrimitiveWrapper(c);
         }    
         // Convert
         if (c.isAssignableFrom(Boolean.class))
@@ -548,7 +547,7 @@ public final class ObjectUtils
         // Get Class form Primitive Type
         if (source.isPrimitive())
         {   // Get's the Java Class representing the primitive type
-            source = MethodUtils.getPrimitiveWrapper(source);
+            source = getPrimitiveWrapper(source);
             if (source == null)
                 return false;
             if (target.isAssignableFrom(source))
@@ -557,7 +556,7 @@ public final class ObjectUtils
         // Get Class form Primitive Type
         if (target.isPrimitive())
         {   // Get's the Java Class representing the primitive type
-            target = MethodUtils.getPrimitiveWrapper(target);
+            target = getPrimitiveWrapper(target);
             if (target == null)
                 return false;
             if (target.isAssignableFrom(source))
@@ -577,6 +576,31 @@ public final class ObjectUtils
         }    
         // Not compatible
         return false;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static Class getPrimitiveWrapper(Class primitiveType) {
+        // does anyone know a better strategy than comparing names?
+        if (boolean.class.equals(primitiveType)) {
+            return Boolean.class;
+        } else if (float.class.equals(primitiveType)) {
+            return Float.class;
+        } else if (long.class.equals(primitiveType)) {
+            return Long.class;
+        } else if (int.class.equals(primitiveType)) {
+            return Integer.class;
+        } else if (short.class.equals(primitiveType)) {
+            return Short.class;
+        } else if (byte.class.equals(primitiveType)) {
+            return Byte.class;
+        } else if (double.class.equals(primitiveType)) {
+            return Double.class;
+        } else if (char.class.equals(primitiveType)) {
+            return Character.class;
+        } else {
+            
+            return null;
+        }
     }
     
     /**

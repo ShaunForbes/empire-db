@@ -447,7 +447,7 @@ public class DBDatabaseDriverPostgreSQL extends DBDatabaseDriver
             throw new InvalidArgumentException("column", column);
         StringBuilder sql = new StringBuilder(80);
         if(seqName.startsWith("nextval(") && seqName.endsWith(")")) {
-            column.getDatabase().appendQualifiedName(sql, seqName, false);
+            sql.append(seqName);
         } else {
             sql.append("nextval('");
             column.getDatabase().appendQualifiedName(sql, seqName, false);

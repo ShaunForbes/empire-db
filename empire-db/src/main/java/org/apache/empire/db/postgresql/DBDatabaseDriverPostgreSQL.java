@@ -421,9 +421,13 @@ public class DBDatabaseDriverPostgreSQL extends DBDatabaseDriver
     { 
         // Use PostgreSQL Sequences
         StringBuilder sql = new StringBuilder(80);
-        sql.append("SELECT nextval('");
-        db.appendQualifiedName(sql, seqName, detectQuoteName(seqName));
-        sql.append("')");
+        if(seqName.startsWith("nextval(") && seqName.endsWith(")")) {
+            sql.append("SELECT ").append(seqName);
+        } else {
+            sql.append("SELECT nextval('");
+            db.appendQualifiedName(sql, seqName, detectQuoteName(seqName));
+            sql.append("')");
+        }
         Object val = db.querySingleValue(sql.toString(), null, conn);
         if (val == null)
         { // Error!
@@ -442,9 +446,13 @@ public class DBDatabaseDriverPostgreSQL extends DBDatabaseDriver
         if (StringUtils.isEmpty(seqName))
             throw new InvalidArgumentException("column", column);
         StringBuilder sql = new StringBuilder(80);
-        sql.append("nextval('");
-        column.getDatabase().appendQualifiedName(sql, seqName, false);
-        sql.append("')");
+        if(seqName.startsWith("nextval(") && seqName.endsWith(")")) {
+            column.getDatabase().appendQualifiedName(sql, seqName, false);
+        } else {
+            sql.append("nextval('");
+            column.getDatabase().appendQualifiedName(sql, seqName, false);
+            sql.append("')");
+        }
         return new DBValueExpr(column.getDatabase(), sql.toString(), DataType.UNKNOWN);
     }
 
